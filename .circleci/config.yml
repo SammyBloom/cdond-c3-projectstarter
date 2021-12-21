@@ -306,7 +306,11 @@ jobs:
           command: |
             cd backend
             echo "CIRCLE_WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}"
-            if grep -q "has been executed successfully." ./backend/migrations_dump.txt
+
+            MIGRATIONS = $(cat backend/migrations_dump.txt)
+            echo "MIGRATIONS = ${MIGRATIONS}"
+
+            if grep -q "has been executed successfully." backend/migrations_dump.txt
             then
               echo "Migration was successful, updating memstash..."
               # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
