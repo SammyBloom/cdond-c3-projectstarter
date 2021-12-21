@@ -40,7 +40,7 @@ commands:
               echo "Reverting..."
               cd ./backend
               npm install
-              npm run migration:revert
+              npm run migrations:revert
             else
               echo "Failed to revert"
                 
@@ -301,24 +301,27 @@ jobs:
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
 
-      - run:
-          name: Send migration results to memstash
-          command: |
-            cd backend
-            echo "CIRCLE_WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}"
+            echo "Migration was successful."
 
-            MIGRATIONS = $(cat ./backend/migrations_dump.txt)
-            echo "MIGRATIONS = ${MIGRATIONS}"
+      # - run:
+      #     name: Send migration results to memstash
+      #     command: |
+      #       cd backend
+      #       echo "CIRCLE_WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}"
 
-            if grep -q "has been executed successfully." ./backend/migrations_dump.txt
-            then
-              echo "Migration was successful, updating memstash..."
-              # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+      #       MIGRATIONS = $(cat migrations_dump.txt)
+      #       echo "MIGRATIONS = ${MIGRATIONS}"
+
+      #       if grep -q "has been executed successfully." migrations_dump.txt
+      #       then
+      #         echo "Migration was successful, updating memstash..."
+      #         # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
               
-            else
-              echo "Migration failed, Maybe the database already exists. Verify setup!"
-              # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "0" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}  
-            fi
+      #       else
+      #         echo "Migration failed, Maybe the database already exists. Verify setup!"
+      #         # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "0" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}  
+      #       fi
+      
       - persist_to_workspace:
           root: ./
           paths:
