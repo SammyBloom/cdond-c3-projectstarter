@@ -34,15 +34,25 @@ commands:
           command: |
             # Your Memstash GET URL code goes here
             # See an example below
-            SUCCESS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/migration_<< parameters.workflow_id >>)
-            if (( $SUCCESS == 1 ));
+            # SUCCESS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/migration_<< parameters.workflow_id >>)
+            if grep -q "has been executed successfully." ./backend/migrations_dump.txt
             then
+              echo "Reverting..."
               cd ./backend
               npm install
               npm run migration:revert
             else
-              echo "failed to revert"  
-            fi
+              echo "Failed to revert"
+                
+            # fi
+            # if (( $SUCCESS == 1 ));
+            # then
+            #   cd ./backend
+            #   npm install
+            #   npm run migration:revert
+            # else
+            #   echo "failed to revert"  
+            # fi
 
 jobs:
   build-frontend:
@@ -189,12 +199,11 @@ jobs:
               --filters "Name=tag:project,Values=udapeople-backend" \
               --output text)
 
-              echo "${BACKEND_IP}" >> .circleci/ansible/inventory.txt
+            echo "${BACKEND_IP}" >> .circleci/ansible/inventory.txt
 
             cat .circleci/ansible/inventory.txt
-
-            curl -H "Content-Type: text/plain" -H "token: c47d93a2-6701-41a5-8842-e115b7714054" --request PUT --data "${BACKEND_IP}" https://api.memstash.io/values/backendipurl
-
+            
+            # curl -H "Content-Type: text/plain" -H "token: c47d93a2-6701-41a5-8842-e115b7714054" --request PUT --data "${BACKEND_IP}" https://api.memstash.io/values/backendipurl
       - persist_to_workspace:
           root: ./
           paths:
@@ -300,10 +309,11 @@ jobs:
             if grep -q "has been executed successfully." ./backend/migrations_dump.txt
             then
               echo "Migration was successful, updating memstash..."
-              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              
             else
               echo "Migration failed, Maybe the database already exists. Verify setup!"
-              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "0" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}  
+              # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "0" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}  
             fi
       - persist_to_workspace:
           root: ./
@@ -333,7 +343,17 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(curl -H "token: c47d93a2-6701-41a5-8842-e115b7714054" --request GET https://api.memstash.io/values/backendipurl)
+            # export BACKEND_IP=$(curl -H "token: c47d93a2-6701-41a5-8842-e115b7714054" --request GET https://api.memstash.io/values/backendipurl)
+            
+            BACKEND_IPs=$(cat .circleci/ansible/inventory.txt)
+            echo "BACKEND_IPs = ${BACKEND_IPs}"
+
+            export BACKEND_IP=$(aws ec2 describe-instances \
+              --region ${AWS_DEFAULT_REGION} \
+              --query 'Reservations[*].Instances[0].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople-backend" \
+              --output text)
+          
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
@@ -405,8 +425,13 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            curl -H "token: c47d93a2-6701-41a5-8842-e115b7714054" --request GET https://api.memstash.io/values/backendipurl > backend-url.txt
+            # curl -H "token: c47d93a2-6701-41a5-8842-e115b7714054" --request GET https://api.memstash.io/values/backendipurl > backend-url.txt
 
+            aws ec2 describe-instances \
+              --region ${AWS_DEFAULT_REGION} \
+              --query 'Reservations[*].Instances[0].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople-backend" \
+              --output text > backend-url.txt
             echo backend-url.txt
       - run:
           name: Backend smoke test.
@@ -458,12 +483,15 @@ jobs:
               --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
 
-            export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --region ${AWS_DEFAULT_REGION} --output text)
+            export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --region ${AWS_DEFAULT_REGION} --output text) >> oldworkflowId.txt
+
+            echo "${OldWorkflowID}" >> backend/oldworkflowId.txt
+            cat oldworkflowId.txt
 
             echo OldWorkflowID: "${OldWorkflowID}"
             echo NewWorkflowID: "${CIRCLE_WORKFLOW_ID:0:7}"
 
-            curl -H "Content-Type: text/plain" -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" --request PUT --data "${OldWorkflowID}" https://api.memstash.io/values/oldworkflowid 
+            # curl -H "Content-Type: text/plain" -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" --request PUT --data "${OldWorkflowID}" https://api.memstash.io/values/oldworkflowid 
 
             # Fetch the stack names          
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
@@ -481,14 +509,20 @@ jobs:
       - run:
           name: Get old stack workflow id
           command: |
-            export OldWorkflowID=$(curl -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" \
-              --request GET https://api.memstash.io/values/oldworkflowid)
+            # export OldWorkflowID=$(curl -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" \
+            #   --request GET https://api.memstash.io/values/oldworkflowid)
+
+            export OldWorkflowID=$(cat backend/oldworkflowId.txt) 
             echo Old Workflow Id: "${OldWorkflowID}"
+
       - run:
           name: Remove old stacks and files
           command: |
-            export OldWorkflowID=$(curl -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" \
-              --request GET https://api.memstash.io/values/oldworkflowid)
+            # export OldWorkflowID=$(curl -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" \
+            #   --request GET https://api.memstash.io/values/oldworkflowid)
+
+            export OldWorkflowID=$(cat backend/oldworkflowId.txt)
+            echo "OldWorkflowID = ${OldWorkflowID}"  
 
             export STACKS=($(aws cloudformation list-stacks \
               --query "StackSummaries[*].StackName" \
@@ -510,43 +544,6 @@ jobs:
             else
               echo "Not deleting"
             fi        
-
-  # cleanup:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #     # Docker image here
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Get old stack workflow id
-  #         command: |
-  #           export OldWorkflowID=$(curl -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" --request GET https://api.memstash.io/values/OldWorkflowID)
-
-  #           export WorkFlowID=${CIRCLE_WORKFLOW_ID}
-
-  #           echo "OldWorkFlowID=${OldWorkflowID}"
-  #           echo "NewWorkFlowID=${WorkFlowID}"
-  #         # export STACKS=[] #put the list of stacks here
-  #     - run:
-  #         name: Remove old stacks and files
-  #         command: |
-  #           export OldWorkflowID=$(curl -H "token: e8bcd159-d3de-4f09-8ccf-f59adab71ca8" --request GET https://api.memstash.io/values/OldWorkflowID)
-
-  #           export WorkflowID=${CIRCLE_WORKFLOW_ID}
-
-  #           echo "OldWorkFlowID=${OldWorkflowID}"
-  #           echo "NewWorkFlowID=${WorkflowID}"
-
-  #           if [[ "${OldWorkflowID}" != "${WorkflowID}" ]]
-  #           then
-  #             echo "$OldWorkflowID!=$WorkflowID => will delete old version"
-  #             aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-  #             aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-  #             aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-  #           else
-  #             echo "$OldWorkflowID==$WorkflowID => nothing needs to be done..."
-  #           fi
-  #           # if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
 
 workflows:
   default:
