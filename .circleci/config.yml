@@ -521,7 +521,6 @@ jobs:
 
             export OldWorkflowID=$(cat backend/oldworkflowId.txt) 
             echo Old Workflow Id: "${OldWorkflowID}"
-
       - run:
           name: Remove old stacks and files
           command: |
