@@ -27,13 +27,14 @@ For your submission, please submit the following:
   [URL02_SCREENSHOT](submission\screenshots\URL02.png)
   1. Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03](submission\screenshots\URL03_SCREENSHOT.png) and [URL03-1](submission\screenshots\URL03_SCREENSHOT1.png)
   1. Public URLs to deployed application back-end in EC2 [URL04](submission\screenshots\URL04_SCREENSHOT.png)
-  1. Public URL to your Prometheus Server [URL05](http://ec2-3-88-21-75.compute-1.amazonaws.com:9090/graph)
+  1. Public URL to your Prometheus Server [URL05](http://ec2-3-88-21-75.compute-1.amazonaws.com:9090/)
 - Your screenshots in JPG or PNG format, named using the screenshot number listed in the instructions. These screenshots should be included in your code repository in the root folder.
   1. Job failed because of compile errors. [SCREENSHOT01](submission\screenshots\SCREENSHOT01.png)
   1. Job failed because of unit tests. [SCREENSHOT02](submission\screenshots\SCREENSHOT02.png)
   1. Job that failed because of vulnerable packages. [SCREENSHOT03](submission\screenshots\SCREENSHOT03.png)
   1. An alert from one of your failed builds. [SCREENSHOT04](submission\screenshots\SCREENSHOT04.png)
   1. Appropriate job failure for infrastructure creation. [SCREENSHOT05](submission\screenshots\SCREENSHOT05.png)
+  [SCREENSHOT05](submission\screenshots\SCREENSHOT05_failure.png)
   N/B: Did not get any "check if backend infrastructure exist" error since the AMI ID came working out of the box.
   1. Appropriate job failure for the smoke test job. [SCREENSHOT06](submission\screenshots\SCREENSHOT06.png)
   1. Successful rollback after a failed smoke test. [SCREENSHOT07](submission\screenshots\SCREENSHOT07.png)  
