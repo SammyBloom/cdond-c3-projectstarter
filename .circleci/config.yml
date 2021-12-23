@@ -94,7 +94,8 @@ jobs:
             TYPEORM_USERNAME=${TYPEORM_USERNAME}
             TYPEORM_PASSWORD=${TYPEORM_PASSWORD}
             TYPEORM_DATABASE=${TYPEORM_DATABASE}
-            EOF    
+            EOF  
+            
       - run:
           name: Back-end build
           command: |
