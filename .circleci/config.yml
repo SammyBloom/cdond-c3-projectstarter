@@ -221,7 +221,7 @@ jobs:
       - checkout
       # Checkout code from git
       - add_ssh_keys:
-          fingerprints: ["10:52:32:31:a8:4a:25:03:b2:52:9c:91:a3:b3:0b:4c"]
+          fingerprints: ["72:c9:48:78:08:bb:60:f0:b3:10:96:35:7e:d0:09:b7"]
       # Add ssh keys with fingerprint
       - attach_workspace:
           at: ./
@@ -303,25 +303,6 @@ jobs:
 
             echo "Migration was successful."
 
-      # - run:
-      #     name: Send migration results to memstash
-      #     command: |
-      #       cd backend
-      #       echo "CIRCLE_WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}"
-
-      #       MIGRATIONS = $(cat migrations_dump.txt)
-      #       echo "MIGRATIONS = ${MIGRATIONS}"
-
-      #       if grep -q "has been executed successfully." migrations_dump.txt
-      #       then
-      #         echo "Migration was successful, updating memstash..."
-      #         # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
-              
-      #       else
-      #         echo "Migration failed, Maybe the database already exists. Verify setup!"
-      #         # curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "0" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}  
-      #       fi
-
       - persist_to_workspace:
           root: ./
           paths:
@@ -389,7 +370,7 @@ jobs:
       - checkout
       # Checkout code from git
       - add_ssh_keys:
-          fingerprints: ["10:52:32:31:a8:4a:25:03:b2:52:9c:91:a3:b3:0b:4c"]
+          fingerprints: ["72:c9:48:78:08:bb:60:f0:b3:10:96:35:7e:d0:09:b7"]
       - restore_cache:
           keys: [backend-build]
       - attach_workspace:
