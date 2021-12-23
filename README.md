@@ -40,7 +40,7 @@ For your submission, please submit the following:
   1. Successful cleanup job. [SCREENSHOT09](submission\screenshots\SCREENSHOT09.png) and [SCREENSHOT09-1](submission\screenshots\SCREENSHOT09-1.png)
   1. Only deploy on pushed to `master` branch. [SCREENSHOT10](submission\screenshots\SCREENSHOT10.png)
   1. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11](submission\screenshots\SCREENSHOT11.png), [AvailableDiskSpace](submission\screenshots\Node-Disk-Usage.png) and [CPUusage](submission\screenshots\Node-CPU-Usage.png).
-  1. Provide a screenshot of an alert that was sent by Prometheus. [SCREENSHOT12]
+  1. Provide a screenshot of an alert that was sent by Prometheus. [SCREENSHOT12](submission\screenshots\SCREENSHOT12.png)
 
 - Your presentation should be in PDF format named "presentation.pdf" and should be included in your code repository root folder. 
 
