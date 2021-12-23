@@ -220,7 +220,7 @@ jobs:
       - checkout
       # Checkout code from git
       - add_ssh_keys:
-          fingerprints: ["72:c9:48:78:08:bb:60:f0:b3:10:96:35:7e:d0:09:b7"]
+          fingerprints: ["8f:63:ad:d2:f2:b4:a0:0f:a1:44:32:4b:5e:ff:54:6d"]
       # Add ssh keys with fingerprint
       - attach_workspace:
           at: ./
@@ -284,12 +284,14 @@ jobs:
             echo TYPEORM_PORT=$TYPEORM_PORT >> backend/.env
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env    
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env  
+
       - run:
           name: Install AWS CLI dependencies
           command: |
             sudo apt update
             sudo apt install -y awscli
+
       - run:
           name: Run migrations
           command: |
@@ -369,7 +371,7 @@ jobs:
       - checkout
       # Checkout code from git
       - add_ssh_keys:
-          fingerprints: ["72:c9:48:78:08:bb:60:f0:b3:10:96:35:7e:d0:09:b7"]
+          fingerprints: ["8f:63:ad:d2:f2:b4:a0:0f:a1:44:32:4b:5e:ff:54:6d"]
       - restore_cache:
           keys: [backend-build]
       - attach_workspace:
