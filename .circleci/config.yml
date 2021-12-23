@@ -200,7 +200,6 @@ jobs:
               --output text)
 
             echo "${BACKEND_IP}" >> .circleci/ansible/inventory.txt
-
             cat .circleci/ansible/inventory.txt
             
             # curl -H "Content-Type: text/plain" -H "token: c47d93a2-6701-41a5-8842-e115b7714054" --request PUT --data "${BACKEND_IP}" https://api.memstash.io/values/backendipurl
