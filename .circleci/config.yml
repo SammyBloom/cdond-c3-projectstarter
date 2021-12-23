@@ -220,7 +220,7 @@ jobs:
       - checkout
       # Checkout code from git
       - add_ssh_keys:
-          fingerprints: ["4f:bc:f6:2f:05:01:fc:7a:72:d3:b1:2c:56:4a:94:a3"]
+          fingerprints: ["10:52:32:31:a8:4a:25:03:b2:52:9c:91:a3:b3:0b:4c"]
       # Add ssh keys with fingerprint
       - attach_workspace:
           at: ./
@@ -388,7 +388,7 @@ jobs:
       - checkout
       # Checkout code from git
       - add_ssh_keys:
-          fingerprints: ["4f:bc:f6:2f:05:01:fc:7a:72:d3:b1:2c:56:4a:94:a3"]
+          fingerprints: ["10:52:32:31:a8:4a:25:03:b2:52:9c:91:a3:b3:0b:4c"]
       - restore_cache:
           keys: [backend-build]
       - attach_workspace:
