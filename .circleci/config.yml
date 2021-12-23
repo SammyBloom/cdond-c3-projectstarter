@@ -294,9 +294,9 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install
-            npm run build
-            npm run migrations:revert
+            sudo npm install
+            sudo npm run build
+            sudo npm run migrations:revert
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
 
