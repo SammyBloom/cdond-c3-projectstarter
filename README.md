@@ -27,7 +27,7 @@ For your submission, please submit the following:
   [URL02_SCREENSHOT](submission\screenshots\URL02.png)
   1. Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03](submission\screenshots\URL03_SCREENSHOT.png) and [URL03-1](submission\screenshots\URL03_SCREENSHOT1.png)
   1. Public URLs to deployed application back-end in EC2 [URL04](submission\screenshots\URL04_SCREENSHOT.png)
-  1. Public URL to your Prometheus Server [URL05](http://ec2-3-88-21-75.compute-1.amazonaws.com:9090/)
+  1. Public URL to your Prometheus Server [URL05](submission\screenshots\URL05_SCREENSHOT.png), [PrometheusMonitoringItself](submission\screenshots\Prometheus-monitoring-itself.png)
 - Your screenshots in JPG or PNG format, named using the screenshot number listed in the instructions. These screenshots should be included in your code repository in the root folder.
   1. Job failed because of compile errors. [SCREENSHOT01](submission\screenshots\SCREENSHOT01.png)
   1. Job failed because of unit tests. [SCREENSHOT02](submission\screenshots\SCREENSHOT02.png)
@@ -39,7 +39,7 @@ For your submission, please submit the following:
   1. Successful promotion job. [SCREENSHOT08](submission\screenshots\SCREENSHOT08.png)
   1. Successful cleanup job. [SCREENSHOT09](submission\screenshots\SCREENSHOT09.png) and [SCREENSHOT09-1](submission\screenshots\SCREENSHOT09-1.png)
   1. Only deploy on pushed to `master` branch. [SCREENSHOT10](submission\screenshots\SCREENSHOT10.png)
-  1. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11]
+  1. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11](submission\screenshots\SCREENSHOT11.png), [AvailableDiskSpace](submission\screenshots\Node-Disk-Usage.png) and [CPUusage](submission\screenshots\Node-CPU-Usage.png).
   1. Provide a screenshot of an alert that was sent by Prometheus. [SCREENSHOT12]
 
 - Your presentation should be in PDF format named "presentation.pdf" and should be included in your code repository root folder. 
